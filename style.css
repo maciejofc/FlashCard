@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+h3 {
+  text-align: center;
+}
+h5 {
+  text-align: center;
+}
+html {
+  width: 100%;
+  height: 100%;
+}
+body {
+  font-size: 2vw;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 5%;
+}
+.start {
+  padding: 1em;
+  border: 3px solid red;
+}
+.wrap {
+  margin-top: 1.5em;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+  display: flex;
+  padding: 1.5vw;
+  justify-content: flex-start;
+  border: 2px solid red;
+  gap: 3vw;
+}
+input {
+  font-size: 1.3vw;
+}
+.wrap :nth-child(1) {
+  min-width: 0;
+  border: 1px solid black;
+  padding: 0.8em;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: 8em;
+  max-width: 20em;
+}
+.wrap :nth-child(2) {
+  min-width: 0;
+  border: 1px solid black;
+  padding: 0.8em;
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex-basis: 8em;
+  max-width: 20em;
+}
+.wrap :nth-child(3) {
+  flex-basis: 4em;
+  min-width: 0;
+  margin-left: auto;
+  border: 1px solid black;
+  padding: 0.3em;
+}
+.wrap :nth-child(4) {
+  flex-basis: 4em;
+  min-width: 0;
+  /* margin-left: auto; */
+  border: 1px solid black;
+  padding: 0.3em;
+}
+
+#collection {
+  margin-top: 1em;
+  border: 3px solid red;
+  height: 100vh;
+}
+
+
+
+.database {
+text-align: center;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash card app</title>
+    <link rel ="stylesheet" type="text/css" href = "style.css">
+</head>
+<body>
+    <div class ="start">
+        <h3 id="title">
+            Flash cards
+            </h2>
+            <div class="wrap">
+                   
+                    <input type="text" id="first-text" name="first-text" placeholder="key">
+                
+            
+                
+                    <input type="text" id="second-text" name="second-text" placeholder="value">
+                
+                    <button type="Submit" id= "btn-clear-all">Clear all</button>
+                    <button type="Submit" id= "btn-insert">Insert</button>
+                
+            </div>
+    </div>
+    <div class="database">
+        <h3>Choose db</h3>
+        DB<input type ='text' value = 'notes' id = 'txtDB'>
+        Version <input type ='text' value = '1' id = 'txtVersion'>
+        <button id ='btn-open-db'>Open DB</button>
+        <button id = "btn-view-notes">View notes</button>
+    </div>
+    
+    <div id="collection">
+        
+    </div>
+    
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
