@@ -12,7 +12,7 @@ import {
   createStore,
 } from "https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm";
 
-import {uid } from './uid.js';
+import { uid } from "./uid.js";
 console.log(uid());
 // ------------------------------------------------
 // Unneduateky-invoked function expression IIFE
@@ -69,7 +69,6 @@ console.log(uid());
 // //      })
 // //      .catch(console.warn);
 
-
 // //      update('user_id',(val) =>{
 // //        return 3;
 // //      })
@@ -89,7 +88,7 @@ console.log(uid());
 // //        console.log('deleted nope')
 // //      })
 // //      .catch(console.warn);
-     
+
 // //      keys()
 // //      .then((value) =>console.log(value));
 
@@ -101,15 +100,10 @@ console.log(uid());
 //   entries(st)
 //   .then((value) => insertListItem(value[0], value[1]));
 
-
 // // entries(st)
 // //   .then((value) => render(value));
 
 //   })();
-
-
-
-
 
 // ------------------------------------------------
 const inpKey = document.getElementById("first-text");
@@ -121,26 +115,19 @@ const btnOpenDB = document.getElementById("btn-open-db");
 const btnViewNotes = document.getElementById("btn-view-notes");
 const list = document.getElementById("list");
 
-
-
-function render(array){
+function render(array) {
   const length = array.length;
   for (let i = 0; i < length; i++) {
-    let  record = document.createElement('li');
+    let record = document.createElement("li");
     let key = array[i][0];
-    let value =array[i][1];
-    record.textContent = key+" : "+value;
+    let value = array[i][1];
+    record.textContent = key + " : " + value;
     list.appendChild(record);
   }
 }
 // ------------------------------------------------
 // btnViewNotes.addEventListener("click", viewNotes);
 // btnOpenDB.addEventListener("click", openDB);
-
-
-
-
-
 
 //btnClearAll.addEventListener("click", deleteAllNotes);
 // ------------------------------------------------
@@ -196,64 +183,58 @@ function render(array){
 const IDB = (function init() {
   var db = null;
   let objectStore = null;
-  let DBOpenReq = indexedDB.open('flashCardDB', 2);
+  let DBOpenReq = indexedDB.open("flashCardDB", 2);
 
-  DBOpenReq.addEventListener('error', (err) => {
+  DBOpenReq.addEventListener("error", (err) => {
     //Error occurred while trying to open DB
     console.warn(err);
   });
-  DBOpenReq.addEventListener('success', (ev) => {
+  DBOpenReq.addEventListener("success", (ev) => {
     //DB has been opened... after upgradeneeded
     db = ev.target.result;
-    console.log('success', db);
+    console.log("success", db);
   });
-  DBOpenReq.addEventListener('upgradeneeded', (ev) => {
+  DBOpenReq.addEventListener("upgradeneeded", (ev) => {
     //first time opening this DB
     //OR a new version was passed into open()
     db = ev.target.result;
     let oldVersion = ev.oldVersion;
     let newVersion = ev.newVersion || db.version;
-    console.log('DB updated from version', oldVersion, 'to', newVersion);
+    console.log("DB updated from version", oldVersion, "to", newVersion);
 
-    console.log('upgrade', db);
-    if (!db.objectStoreNames.contains('flashCardStore')) {
-      objectStore = db.createObjectStore('flashCardStore', {
-        keyPath: 'id',
+    console.log("upgrade", db);
+    if (!db.objectStoreNames.contains("flashCardStore")) {
+      objectStore = db.createObjectStore("flashCardStore", {
+        keyPath: "id",
       });
     }
-    
-    btnInsert.addEventListener('click', function() {
-      console.log('lala');
+
+    btnInsert.addEventListener("click", function () {
+      console.log("lala");
       const key = inpKey.value;
       const value = inpValue.value;
-      const record = document.createElement('li');
-      record.textContent = key+" : "+value;
-    let flashCard = {
-      id: uid(),
-      firstCard:key,
-      secondCard:value
-    
-    }
-     let tx = db.transaction('flashCardStore','readwrite');
-    tx.oncomplete = (ev) => {
-    console.log(ev);
-    }
-    tx.onerror = (err) => {
-      console.warn(err);
-    }
-    let store  = tx.objectStore('flashCardStore');
-    let request = store.add(flashCard);
-    request.onsuccess = (ev) => {
-      console.log('successfully added a card');
-    };
-    request.onerror = (err) => {
-      console.log('error in request to add  a card');
-    };
-    
-    })
-
-
+      const record = document.createElement("li");
+      record.textContent = key + " : " + value;
+      let flashCard = {
+        id: uid(),
+        firstCard: key,
+        secondCard: value,
+      };
+      let tx = db.transaction("flashCardStore", "readwrite");
+      tx.oncomplete = (ev) => {
+        console.log(ev);
+      };
+      tx.onerror = (err) => {
+        console.warn(err);
+      };
+      let store = tx.objectStore("flashCardStore");
+      let request = store.add(flashCard);
+      request.onsuccess = (ev) => {
+        console.log("successfully added a card");
+      };
+      request.onerror = (err) => {
+        console.log("error in request to add  a card");
+      };
+    });
   });
-
 })();
- 

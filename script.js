@@ -2,14 +2,12 @@ import { uid } from "./uid.js";
 console.log(uid());
 
 // ------------------------------------------------
-const inpKey = document.getElementById("first-text");
-const inpValue = document.getElementById("second-text");
+const inpFirstValue = document.getElementById("first-text");
+const inpSecondValue = document.getElementById("second-text");
 const btnInsert = document.getElementById("btn-insert");
-const cards = document.getElementById("collection");
-const btnClearAll = document.getElementById("btn-clear-all");
-const btnOpenDB = document.getElementById("btn-open-db");
-const btnViewNotes = document.getElementById("btn-view-notes");
-const list = document.getElementById("list");
+const inpChangeFirstCard = document.getElementById("first-card-tochange");
+const inpChangeSecondCard = document.getElementById("second-card-tochange");
+const btnUpdate = document.getElementById("update");
 
 const IDB = (function init() {
   var db = null;
@@ -25,6 +23,7 @@ const IDB = (function init() {
     db = ev.target.result;
     console.log("success", db);
     buildList();
+    turnOnPopUp();
   });
   DBOpenReq.addEventListener("upgradeneeded", (ev) => {
     //first time opening this DB
@@ -33,7 +32,6 @@ const IDB = (function init() {
     let oldVersion = ev.oldVersion;
     let newVersion = ev.newVersion || db.version;
     console.log("DB updated from version", oldVersion, "to", newVersion);
-
     console.log("upgrade", db);
     if (!db.objectStoreNames.contains("flashCardStore")) {
       objectStore = db.createObjectStore("flashCardStore", {
@@ -41,36 +39,42 @@ const IDB = (function init() {
       });
     }
   });
+  //----------------------------------------------------------------
+  
+  //this is hoisting - we can invoke function
+  //(if it is declaration function not expression function) 
+  //before it is declared 
+  add();
+  
+  function add() {
+    btnInsert.addEventListener("click", function () {
+      const firstValue = inpFirstValue.value;
+      const secondValue = inpSecondValue.value;
+      let flashCard = {
+        id: uid(),
+        firstCard: firstValue,
+        secondCard: secondValue,
+      };
+      let tx = makeTX("flashCardStore", "readwrite");
+      tx.oncomplete = (ev) => {
+        console.log(ev);
+        clearInput();
+        buildList();
+      };
+      tx.onerror = (err) => {
+        console.warn(err);
+      };
+      let store = tx.objectStore("flashCardStore");
+      let request = store.add(flashCard);
+      request.onsuccess = (ev) => {
+        console.log("successfully added a card");
+      };
+      request.onerror = (err) => {
+        console.log("error in request to add  a card");
+      };
+    });
+  }
 
-  btnInsert.addEventListener("click", function () {
-    console.log("lala");
-    const key = inpKey.value;
-    const value = inpValue.value;
-    const record = document.createElement("li");
-    record.textContent = key + " : " + value;
-    let flashCard = {
-      id: uid(),
-      firstCard: key,
-      secondCard: value,
-    };
-    let tx = makeTX("flashCardStore", "readwrite");
-    tx.oncomplete = (ev) => {
-      console.log(ev);
-      clearInput();
-      buildList();
-    };
-    tx.onerror = (err) => {
-      console.warn(err);
-    };
-    let store = tx.objectStore("flashCardStore");
-    let request = store.add(flashCard);
-    request.onsuccess = (ev) => {
-      console.log("successfully added a card");
-    };
-    request.onerror = (err) => {
-      console.log("error in request to add  a card");
-    };
-  });
   function makeTX(storeName, mode) {
     let tx = db.transaction(storeName, mode);
     tx.onerror = (err) => {
@@ -90,27 +94,106 @@ const IDB = (function init() {
     // return an array
     //optional can pass keyRange
     getReq.onsuccess = (ev) => {
-      //getAll was successful
       let request = ev.target; //request === getReq ===ev.target
       console.log({ request });
       list.innerHTML = request.result
         .map((card) => {
-          return `<li  class="item" data-key = "${card.id}"><span>${card.firstCard}</span>${card.secondCard} <button type="button">Update</button> <button type="button">Delete</button> </li>`;
+          return `<li  class="item" data-key = "${card.id}">
+          <span>${card.firstCard}
+          </span><span>${card.secondCard}</span> 
+          <button data-modal-target="#modal">Edit</button>
+          </li>`;
         })
         .join("\n");
+      turnOnPopUp();
     };
     getReq.onerror = (err) => {
       console.warn(err);
     };
   }
-
-  list.addEventListener('click',(ev) =>{
-    let li = ev.target.closest('[data-key]');
-    let id = li.getAttribute('data-key');
-    console.log(id);
-  })
   function clearInput() {
-    inpKey.value = 0;
-    inpValue.value = 0;
+    inpFirstValue.value = 0;
+    inpSecondValue.value = 0;
   }
+  function update(key) {
+    btnUpdate.addEventListener("click", (ev) => {
+      if (key) {
+        let flashCard = {
+          id: key,
+          firstCard: inpChangeFirstCard.value,
+          secondCard: inpChangeSecondCard.value,
+        };
+
+        let tx = makeTX("flashCardStore", "readwrite");
+        tx.oncomplete = (ev) => {
+          buildList();
+        };
+        tx.onerror = (err) => {
+          console.warn(err);
+        };
+        let store = tx.objectStore("flashCardStore");
+        let request = store.put(flashCard);
+        request.onsuccess = (ev) => {
+          console.log("successfully updated a card");
+        };
+        request.onerror = (err) => {
+          console.log("error in request to update  a card");
+        };
+      }
+    });
+  }
+
+  // ----------------------MODALS---------------
+  //we invoke turnOnPopUp in building (rendering) section
+  function turnOnPopUp() {
+    const openModalButtons = document.querySelectorAll("[data-modal-target]");
+    const closeModalButtons = document.querySelectorAll("[data-close-button]");
+    const overlay = document.getElementById("overlay");
+    console.log(openModalButtons);
+    openModalButtons.forEach((button) => {
+      button.addEventListener("click", (ev) => {
+        //javascript is automatic formating dashed to camelCase
+        //choosing which modal(id) to open
+        const modal = document.querySelector(button.dataset.modalTarget);
+        console.log("INFO ABOUT MODAL: ");
+        console.log(modal);
+        let li = ev.target.closest("[data-key]");
+        let key = li.getAttribute("data-key");
+        let firstCard = li.children[0].innerText;
+        let secondCard = li.children[1].innerText;
+        inpChangeFirstCard.value = firstCard;
+        inpChangeSecondCard.value = secondCard;
+        openModal(modal);
+        update(key);
+        
+      });
+    });
+
+    overlay.addEventListener("click", () => {
+      const modals = document.querySelectorAll(".modal.active");
+      modals.forEach((modal) => {
+        closeModal(modal);
+      });
+    });
+
+    closeModalButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const modal = button.closest(".modal");
+        closeModal(modal);
+      });
+    });
+
+    function openModal(modal) {
+      if (modal == null) return;
+      modal.classList.add("active");
+      overlay.classList.add("active");
+    }
+
+    function closeModal(modal) {
+      if (modal == null) return;
+      modal.classList.remove("active");
+      overlay.classList.remove("active");
+    }
+  }
+  
 })();
