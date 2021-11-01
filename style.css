@@ -88,6 +88,13 @@ input {
   display: flex;
   justify-content: space-between;
 }
+span {
+  border: 1px solid green;
+  width: 5em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
 .database {
   text-align: center;

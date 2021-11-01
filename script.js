@@ -7,7 +7,7 @@ const inpSecondValue = document.getElementById("second-text");
 const btnInsert = document.getElementById("btn-insert");
 const inpChangeFirstCard = document.getElementById("first-card-tochange");
 const inpChangeSecondCard = document.getElementById("second-card-tochange");
-const btnUpdate = document.getElementById("update");
+const btnUpdate = document.getElementById("btn-modal-update");
 
 const IDB = (function init() {
   var db = null;
@@ -23,7 +23,7 @@ const IDB = (function init() {
     db = ev.target.result;
     console.log("success", db);
     buildList();
-    turnOnPopUp();
+    enablePopUp();
   });
   DBOpenReq.addEventListener("upgradeneeded", (ev) => {
     //first time opening this DB
@@ -40,13 +40,42 @@ const IDB = (function init() {
     }
   });
   //----------------------------------------------------------------
-  
+
   //this is hoisting - we can invoke function
-  //(if it is declaration function not expression function) 
-  //before it is declared 
-  add();
-  
-  function add() {
+  //(if it is declaration function not expression function)
+  //before it is declared
+  //we invoke it here because we do not need to wait for content rendering
+  enableAdd();
+
+  function enableRemove() {
+    const btnsRemove = document.querySelectorAll(".btn-remove");
+    console.log(btnsRemove);
+    btnsRemove.forEach((button) => {
+      button.addEventListener("click", (ev) => {
+        let li = ev.target.closest("[data-key]");
+        let key = li.getAttribute("data-key");
+        if (key) {
+          let tx = makeTX("flashCardStore", "readwrite");
+          tx.oncomplete = (ev) => {
+            buildList();
+          };
+          tx.onerror = (err) => {
+            console.warn(err);
+          };
+          let store = tx.objectStore("flashCardStore");
+          let request = store.delete(key);
+          request.onsuccess = (ev) => {
+            console.log("successfully deleted a card");
+          };
+          request.onerror = (err) => {
+            console.log("error in request to delete  a card");
+          };
+        }
+      });
+    });
+  }
+
+  function enableAdd() {
     btnInsert.addEventListener("click", function () {
       const firstValue = inpFirstValue.value;
       const secondValue = inpSecondValue.value;
@@ -102,10 +131,12 @@ const IDB = (function init() {
           <span>${card.firstCard}
           </span><span>${card.secondCard}</span> 
           <button data-modal-target="#modal">Edit</button>
+          <button class="btn-remove">Delete</button>
           </li>`;
         })
         .join("\n");
-      turnOnPopUp();
+      enablePopUp();
+      enableRemove();
     };
     getReq.onerror = (err) => {
       console.warn(err);
@@ -115,7 +146,7 @@ const IDB = (function init() {
     inpFirstValue.value = 0;
     inpSecondValue.value = 0;
   }
-  function update(key) {
+  function enableUpdate(key) {
     btnUpdate.addEventListener("click", (ev) => {
       if (key) {
         let flashCard = {
@@ -145,11 +176,10 @@ const IDB = (function init() {
 
   // ----------------------MODALS---------------
   //we invoke turnOnPopUp in building (rendering) section
-  function turnOnPopUp() {
+  function enablePopUp() {
     const openModalButtons = document.querySelectorAll("[data-modal-target]");
     const closeModalButtons = document.querySelectorAll("[data-close-button]");
     const overlay = document.getElementById("overlay");
-    console.log(openModalButtons);
     openModalButtons.forEach((button) => {
       button.addEventListener("click", (ev) => {
         //javascript is automatic formating dashed to camelCase
@@ -164,8 +194,7 @@ const IDB = (function init() {
         inpChangeFirstCard.value = firstCard;
         inpChangeSecondCard.value = secondCard;
         openModal(modal);
-        update(key);
-        
+        enableUpdate(key);
       });
     });
 
@@ -195,5 +224,4 @@ const IDB = (function init() {
       overlay.classList.remove("active");
     }
   }
-  
 })();
