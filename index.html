@@ -1,51 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flash card app</title>
-    <link rel ="stylesheet" type="text/css" href = "style.css">
-</head>
-<body>
-    
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
     <div class="modal" id="modal">
-        <div class="modal-header">
-          <div class="title">Example Modal</div>
-          <button data-close-button class="close-button">&times;</button>
-        </div>
-        <div class="modal-body">
-          <input type="text" id="first-card-tochange" name="first-card" />
-          <input type="text" id="second-card-tochange" name="second-card" />
-          <button id="btn-modal-update" type="submit">Update</button>
-        </div>
+      <div class="modal-header">
+        <div class="title">Example Modal</div>
+        <button data-close-button class="close-button">&times;</button>
       </div>
-    <div class ="start">
-        <h3 id="title">
-            Flash cards
-            </h2>
-            <div class="wrap">
-                    <input type="text" id="first-text" name="first-text" placeholder="Enter a word...">
-                    <input type="text" id="second-text" name="second-text" placeholder="Enter a word...">   
-                    <button type="Submit" id= "btn-clear-all">Clear all</button>
-                    <button type="Submit" id= "btn-insert">Insert</button>
-                
-            </div>
-    </div>
- 
-    
-    <div id="collection">
-        <ol id = "list">
-
-        </ol>
-    </div>
-    
-
-
-      <div id="overlay">
-          
+      <div class="modal-body">
+        <input type="text" id="first-card-tochange" name="first-card" />
+        <input type="text" id="second-card-tochange" name="second-card" />
+        <button id="btn-modal-update" type="submit">Update</button>
       </div>
-    <script type = "module"  src="script.js"></script>
-    
-</body>
+    </div>
+    <header>
+      <nav>
+        <a href="welcome.html" id="home-link">
+          <img src="img/log_rmv_bg.png" alt="logo" width="70" height="70" />
+          <h1>Flash Cards</h1>
+        </a>
+
+        <div>
+          <ul id="nav-links">
+            <li><a id="play" href="">PLAY</a></li>
+            <li><a href="">STATISTICS</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div class="main">
+      <section>
+        <h3 id="title">Add cards</h3>
+        <div class="wrap">
+          <input
+            class="insert-input"
+            type="text"
+            id="first-text"
+            name="first-text"
+            placeholder="Enter term..."
+          />
+          <input
+            class="insert-input"
+            type="text"
+            id="second-text"
+            name="second-text"
+            placeholder="Enter answer..."
+          />
+          <button class="button-svg" type="Submit" id="btn-clear-all">
+            <img src="img/trash-alt-solid.svg" width="60px" height="60px" />
+          </button>
+          <button class="button-svg" type="Submit" id="btn-insert">
+            <img src="img/plus-circle-solid.svg" width="60px" height="60px" />
+          </button>
+        </div>
+      </section>
+      <article>
+        <div id="collection">
+          <ol id="list"></ol>
+        </div>
+      </article>
+    </div>
+
+    <div id="overlay"></div>
+    <script type="module" src="script.js"></script>
+  </body>
 </html>

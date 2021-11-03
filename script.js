@@ -12,7 +12,7 @@ const btnUpdate = document.getElementById("btn-modal-update");
 const IDB = (function init() {
   var db = null;
   let objectStore = null;
-  let DBOpenReq = indexedDB.open("flashCardDB", 3);
+  let DBOpenReq = indexedDB.open("flashCardDB", 2);
 
   DBOpenReq.addEventListener("error", (err) => {
     //Error occurred while trying to open DB
@@ -127,11 +127,19 @@ const IDB = (function init() {
       console.log({ request });
       list.innerHTML = request.result
         .map((card) => {
-          return `<li  class="item" data-key = "${card.id}">
-          <span>${card.firstCard}
-          </span><span>${card.secondCard}</span> 
-          <button data-modal-target="#modal">Edit</button>
-          <button class="btn-remove">Delete</button>
+          return `<li  class="single-record" data-key = "${card.id}">
+          <ul class = "flex-container-in-record phrases">
+
+          <li>${card.firstCard}</li>
+          <li>${card.secondCard}</li>
+          
+          </ul>
+          <div class = "flex-container-in-record">
+          <button class = "button-svg" data-modal-target="#modal"><img class="svg-img" src="img/edit-solid.svg"></button>
+          <button class = "btn-remove button-svg"><img class="svg-img"src="img/trash-alt-solid.svg"></button>
+          </div>
+          
+          
           </li>`;
         })
         .join("\n");
@@ -143,8 +151,8 @@ const IDB = (function init() {
     };
   }
   function clearInput() {
-    inpFirstValue.value = 0;
-    inpSecondValue.value = 0;
+    inpFirstValue.value = "";
+    inpSecondValue.value = "";
   }
   function enableUpdate(key) {
     btnUpdate.addEventListener("click", (ev) => {
