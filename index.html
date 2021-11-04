@@ -8,17 +8,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <div class="modal" id="modal">
-      <div class="modal-header">
-        <div class="title">Example Modal</div>
-        <button data-close-button class="close-button">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="first-card-tochange" name="first-card" />
-        <input type="text" id="second-card-tochange" name="second-card" />
-        <button id="btn-modal-update" type="submit">Update</button>
-      </div>
-    </div>
+    
     <header>
       <nav>
         <a href="welcome.html" id="home-link">
@@ -36,37 +26,48 @@
     </header>
     <div class="main">
       <section>
-        <h3 id="title">Add cards</h3>
+        <h1 id="title">Add cards</h3>
         <div class="wrap">
           <input
-            class="insert-input"
+            class="insert-input flex-child-input"
             type="text"
             id="first-text"
             name="first-text"
             placeholder="Enter term..."
           />
           <input
-            class="insert-input"
+            class="insert-input flex-child-input"
             type="text"
             id="second-text"
             name="second-text"
             placeholder="Enter answer..."
           />
-          <button class="button-svg" type="Submit" id="btn-clear-all">
-            <img src="img/trash-alt-solid.svg" width="60px" height="60px" />
+          <button class="button-svg flex-child-input" type="Submit" id="btn-clear-all">
+            <img class="svg-img-insert"src="img/trash-alt-solid.svg" width="60px" height="60px" />
           </button>
-          <button class="button-svg" type="Submit" id="btn-insert">
-            <img src="img/plus-circle-solid.svg" width="60px" height="60px" />
+          <button class="button-svg flex-child-input" type="Submit" id="btn-insert">
+            <img class ='svg-img-insert' src="img/plus-circle-solid.svg" width="60px" height="60px" />
           </button>
         </div>
       </section>
       <article>
         <div id="collection">
+          <h2>Your Collection</h1>
           <ol id="list"></ol>
         </div>
       </article>
     </div>
-
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="title">Edit</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input class ="modal-input" type="text" id="first-card-tochange" name="first-card" />
+        <input class ="modal-input" type="text" id="second-card-tochange" name="second-card" />
+        <button id="btn-modal-update" type="submit">Update</button>
+      </div>
+    </div>
     <div id="overlay"></div>
     <script type="module" src="script.js"></script>
   </body>

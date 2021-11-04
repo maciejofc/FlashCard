@@ -8,7 +8,7 @@ const btnInsert = document.getElementById("btn-insert");
 const inpChangeFirstCard = document.getElementById("first-card-tochange");
 const inpChangeSecondCard = document.getElementById("second-card-tochange");
 const btnUpdate = document.getElementById("btn-modal-update");
-
+const btnClearAll = document.getElementById("btn-clear-all");
 const IDB = (function init() {
   var db = null;
   let objectStore = null;
@@ -74,6 +74,26 @@ const IDB = (function init() {
       });
     });
   }
+  enableClearAll();
+  function enableClearAll() {
+    btnClearAll.addEventListener("click", function () {
+      let tx = makeTX("flashCardStore", "readwrite");
+      tx.oncomplete = (ev) => {
+        buildList();
+      };
+      tx.onerror = (err) => {
+        console.warn(err);
+      };
+      let store = tx.objectStore("flashCardStore");
+      let request = store.clear();
+      request.onsuccess = (ev) => {
+        console.log("successfully added a card");
+      };
+      request.onerror = (err) => {
+        console.log("error in request to add  a card");
+      };
+    });
+  }
 
   function enableAdd() {
     btnInsert.addEventListener("click", function () {
@@ -127,16 +147,16 @@ const IDB = (function init() {
       console.log({ request });
       list.innerHTML = request.result
         .map((card) => {
-          return `<li  class="single-record" data-key = "${card.id}">
-          <ul class = "flex-container-in-record phrases">
-
-          <li>${card.firstCard}</li>
-          <li>${card.secondCard}</li>
+          return `<li class="single-record" data-key = "${card.id}">
           
+          <ul class = "phrases">
+            <li class="phrase">${card.firstCard}</li>
+            <li class="phrase">${card.secondCard}</li>
           </ul>
-          <div class = "flex-container-in-record">
-          <button class = "button-svg" data-modal-target="#modal"><img class="svg-img" src="img/edit-solid.svg"></button>
-          <button class = "btn-remove button-svg"><img class="svg-img"src="img/trash-alt-solid.svg"></button>
+
+          <div class ="buttons-in-record">
+            <button class = "button-svg" data-modal-target="#modal"><img class="svg-img" src="img/edit-solid.svg"></button>
+            <button class = "btn-remove button-svg"><img class="svg-img"src="img/trash-alt-solid.svg"></button>
           </div>
           
           

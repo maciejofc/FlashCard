@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+html {
+  height: 100%;
+  font-size: 20px;
+}
+body {
+  min-height: 100%;
+  width: 100%;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: blue;
+}
+#home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+#nav-links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+#nav-links li {
+  list-style: none;
+}
+#nav-links li a {
+  text-decoration: none;
+  color: white;
+  padding: 1rem;
+}
