@@ -12,7 +12,7 @@ const btnClearAll = document.getElementById("btn-clear-all");
 const IDB = (function init() {
   var db = null;
   let objectStore = null;
-  let DBOpenReq = indexedDB.open("flashCardDB", 2);
+  let DBOpenReq = indexedDB.open("flashCardDB", 3);
 
   DBOpenReq.addEventListener("error", (err) => {
     //Error occurred while trying to open DB
@@ -217,8 +217,11 @@ const IDB = (function init() {
         console.log(modal);
         let li = ev.target.closest("[data-key]");
         let key = li.getAttribute("data-key");
-        let firstCard = li.children[0].innerText;
-        let secondCard = li.children[1].innerText;
+
+        let firstCard = li.children[0].children[0].innerText;
+
+        let secondCard = li.children[0].children[1].innerText;
+
         inpChangeFirstCard.value = firstCard;
         inpChangeSecondCard.value = secondCard;
         openModal(modal);

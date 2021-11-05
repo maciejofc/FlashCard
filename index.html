@@ -8,7 +8,17 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="title">Edit</div>
+        <button data-close-button class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input class ="modal-input" type="text" id="first-card-tochange" name="first-card" />
+        <input class ="modal-input" type="text" id="second-card-tochange" name="second-card" />
+        <button id="btn-modal-update" type="submit">Update</button>
+      </div>
+    </div>
     <header>
       <nav>
         <a href="welcome.html" id="home-link">
@@ -57,17 +67,7 @@
         </div>
       </article>
     </div>
-    <div class="modal" id="modal">
-      <div class="modal-header">
-        <div class="title">Edit</div>
-        <button data-close-button class="close-button">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input class ="modal-input" type="text" id="first-card-tochange" name="first-card" />
-        <input class ="modal-input" type="text" id="second-card-tochange" name="second-card" />
-        <button id="btn-modal-update" type="submit">Update</button>
-      </div>
-    </div>
+    
     <div id="overlay"></div>
     <script type="module" src="script.js"></script>
   </body>
